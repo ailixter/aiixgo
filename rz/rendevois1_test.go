@@ -50,7 +50,7 @@ func (self *ConsumerTask1) run(pace time.Duration, q quiet, tb testing.TB) {
 	q.println("*** Consumer started", self.filter)
 
 	for {
-		var res = self.producer.syncpoint.Ask(func(product int, ok bool) {
+		var res = self.producer.syncpoint.Send(func(product int, ok bool) {
 			if !ok {
 				//q.println("Consumer", self.filter, "got NO product")
 				time.Sleep(10 * pace * time.Millisecond)
@@ -76,7 +76,7 @@ func TestMain1(t *testing.T) {
 	go prod.run(100, false)
 	time.Sleep(1000 * time.Millisecond)
 	go cons2.run(1, false, t)
-	prod.termination.Ask(func() {
+	prod.termination.Send(func() {
 		fmt.Println("Terminated")
 	})
 }

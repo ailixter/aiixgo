@@ -27,8 +27,8 @@ func NewSyncPoint(fn interface{}) *SyncPoint {
 	return &SyncPoint{fv, make(synchan), make(synchan)}
 }
 
-//	server.syncpoint1.Ask(client.method, a1, a2)
-func (self *SyncPoint) Ask(fn interface{}, args ...interface{}) []interface{} {
+//	server.syncpoint1.Send(client.method, a1, a2)
+func (self *SyncPoint) Send(fn interface{}, args ...interface{}) []interface{} {
 	self.in <- syncstruct{args}
 	var out syncstruct
 	out = <-self.out
