@@ -2,11 +2,11 @@ package rz
 
 import (
 	"fmt"
+	"testing"
 	"time"
-	//"testing"
 )
 
-func ExampleSyncPoint /*_Send*/ () {
+func ExampleSyncPoint() {
 	//  the shared resource
 	var resource int = 0
 	//  create the syncpoint to access the resource
@@ -59,4 +59,40 @@ func ExampleSyncPoint /*_Send*/ () {
 	// 1007
 	// 1008
 	// 1009
+}
+
+func BenchmarkMain(b *testing.B) {
+	var resource int = 0
+	var syncpoint = NewSyncPoint(func(arg1 int) (arg2 int) {
+		return resource + arg1
+	})
+	go func() {
+		for {
+			b.StartTimer()
+			syncpoint.Send(func(arg2 int) { arg2 = 0 }, 1000)
+			b.StopTimer()
+		}
+	}()
+	b.ResetTimer()
+	for resource < b.N {
+		syncpoint.Accept()
+		resource++
+	}
+}
+
+func BenchmarkMain_nofunc(b *testing.B) {
+	var resource int = 0
+	var syncpoint = NewSyncPoint(nil)
+	go func() {
+		for {
+			b.StartTimer()
+			syncpoint.Send(nil)
+			b.StopTimer()
+		}
+	}()
+	b.ResetTimer()
+	for resource < b.N {
+		syncpoint.Accept()
+		resource++
+	}
 }
