@@ -144,6 +144,6 @@ func TestMain2(*testing.T) {
 		fmt.Println(msg, "for main()")
 	})
 
-    //  just let things get done
+	//  just let things get done
 	time.Sleep(1000 * time.Millisecond)
 }

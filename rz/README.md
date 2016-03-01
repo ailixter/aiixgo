@@ -39,4 +39,4 @@ for resource < 10 {
 
 ```
 
-See also godoc for the package and wiki.
+See also godoc for the package, `*_test.go` sources and wiki.
