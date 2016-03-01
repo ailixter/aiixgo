@@ -1,6 +1,6 @@
-#Asymmetric Rendez-Vois for Concurrent Processes
+# Asymmetric Rendez-Vois for Concurrent Processes
 
-It makes it possible to inter-communicate the processes in pure procudural manner.
+It makes it possible to inter-communicate processes in pure procedural manner.
 
 ## Trivial Example
 ``` go
@@ -38,3 +38,5 @@ for resource < 10 {
 }
 
 ```
+
+See also godoc for the package and wiki.
