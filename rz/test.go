@@ -22,4 +22,3 @@ func passed(product int, filter string) bool {
 		return false
 	}
 }
-

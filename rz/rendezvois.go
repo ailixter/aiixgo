@@ -27,7 +27,9 @@ func NewSyncPoint(fn interface{}) *SyncPoint {
 	return &SyncPoint{fv, make(synchan), make(synchan)}
 }
 
-//	server.syncpoint1.Send(client.method, a1, a2)
+//  Send transfers arguments and callback function to syncpoint handler. Say:
+//    result = server.syncpoint.Send(client.method, arg1, arg2)
+//  Then it waits for communication and finally retuns a slice of the callback's results.
 func (self *SyncPoint) Send(fn interface{}, args ...interface{}) []interface{} {
 	self.in <- syncstruct{args}
 	var out syncstruct
@@ -35,6 +37,9 @@ func (self *SyncPoint) Send(fn interface{}, args ...interface{}) []interface{} {
 	return _call(nil, reflect.ValueOf(fn), out.vars)
 }
 
+//  Accept waits for the syncpoint's Send, pass transferred args
+//  to handler function and finally transfer its result slice back
+//  to sender. Thus, this version provides synchronous communication.
 func (self *SyncPoint) Accept() {
 	var ss syncstruct
 	ss = <-self.in
@@ -76,7 +81,9 @@ func (self CallPanic) Error() string {
 }
 
 func _call(lock sync.Locker, fv reflect.Value, args []interface{}) []interface{} {
-	if !fv.IsValid() { return nil }
+	if !fv.IsValid() {
+		return nil
+	}
 	var a = make([]reflect.Value, len(args))
 	for i, arg := range args {
 		a[i] = reflect.ValueOf(arg)
@@ -99,7 +106,9 @@ func _call(lock sync.Locker, fv reflect.Value, args []interface{}) []interface{}
 }
 
 func _lcall(lock sync.Locker, fv reflect.Value, args []reflect.Value) []reflect.Value {
-	if !fv.IsValid() { return nil }
+	if !fv.IsValid() {
+		return nil
+	}
 	defer func() {
 		if lock != nil {
 			lock.Unlock()
@@ -110,4 +119,3 @@ func _lcall(lock sync.Locker, fv reflect.Value, args []reflect.Value) []reflect.
 	}
 	return fv.Call(args)
 }
-

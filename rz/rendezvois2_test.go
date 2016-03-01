@@ -3,8 +3,8 @@ package rz
 import (
 	"fmt"
 	"sync"
-	"time"
 	"testing"
+	"time"
 )
 
 //----------------------------------------------------------------------------//
@@ -143,5 +143,7 @@ func TestMain2(*testing.T) {
 	cons2.termination.Send(func(msg string) {
 		fmt.Println(msg, "for main()")
 	})
-}
 
+    //  just let things get done
+	time.Sleep(1000 * time.Millisecond)
+}

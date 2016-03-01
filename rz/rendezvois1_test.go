@@ -2,9 +2,9 @@
 package rz
 
 import (
+	"fmt"
 	"testing"
 	"time"
-	"fmt"
 )
 
 type ProducerTask1 struct {
@@ -79,4 +79,6 @@ func TestMain1(t *testing.T) {
 	prod.termination.Send(func() {
 		fmt.Println("Terminated")
 	})
+    //  just let things get done
+	time.Sleep(1000 * time.Millisecond)
 }
